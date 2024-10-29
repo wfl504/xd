@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        input {
+            width: 200px;
+            height: 80px;
+            border: 1px solid black;
+            background-color: deepskyblue;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 22px;
+            /* margin-top: 100px; */
+
+            position: fixed;
+            right: 100px;
+            bottom: 8%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <img id="image" src="wxzf.jpg" alt="" style="float: left; width: 300px; display: none;"> -->
+    <input type="button" value="下单" id="print" onclick="dianju(this)">
+</body>
+
+</html>
+<script>
+    function dianju() {
+        var image = arguments[0].src = "wxzf.html";
+        var print = document.getElementById("print");
+        // print.style.display = "block";
+        // image = image.join("");
+        window.location.href = image;
+    }
+</script>
