@@ -1,0 +1,128 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>点击图片播放视频</title>
+    <style>
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            /* 半透明背景 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .video-overlay img {
+            width: 100px;
+            height: auto;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="video-container">
+        <video id="video1" controls>
+            <source src="./video/2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay" data-video-id="video1">
+            <img src="img/bPq5n9ShMy.png" alt="Play Video">
+        </div>
+    </div>
+    <div class="video-container">
+        <video id="video2" controls>
+            <source src="./video/12.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay" data-video-id="video2">
+            <img src="img/bPq5n9ShMy.png" alt="Play Video">
+        </div>
+    </div>
+    <!-- 更多视频和图片可以继续添加 -->
+    <!-- <script>
+        // JavaScript部分
+        const overlays = document.querySelectorAll('.video-overlay');
+        const videos = document.querySelectorAll('video');
+        overlays.forEach((overlay, index) => {
+            overlay.addEventListener('click', function () {
+                const videoId = overlay.getAttribute('data-video-id');
+                const video = document.getElementById(videoId);
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+        });
+        videos.forEach((video) => {
+            video.addEventListener('play', function () {
+                const overlay = document.querySelector(`[data-video-id="${video.id}"]`);
+                overlay.style.display = 'none';
+            });
+            video.addEventListener('ended', function () {
+                const overlay = document.querySelector(`[data-video-id="${video.id}"]`);
+                overlay.style.display = 'flex';
+            });
+        });
+    </script> -->
+    <script>
+    // JavaScript部分
+    const overlays = document.querySelectorAll('.video-overlay');
+    const videos = document.querySelectorAll('video');
+    let currentPlayingVideo = null; // 用于跟踪当前播放的视频
+    
+    overlays.forEach((overlay, index) => {
+        overlay.addEventListener('click', function () {
+            const videoId = overlay.getAttribute('data-video-id');
+            const video = document.getElementById(videoId);
+            // 如果当前有视频正在播放，则先停止播放，并显示其覆盖层图片
+            if (currentPlayingVideo && currentPlayingVideo !== video) {
+                currentPlayingVideo.pause();
+                const currentOverlay = document.querySelector(`[data-video-id="${currentPlayingVideo.id}"]`);
+                currentOverlay.style.display = 'flex';
+            }
+            // 播放或暂停当前视频
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+            // 更新当前播放的视频引用
+            currentPlayingVideo = video;
+        });
+    });
+
+    videos.forEach((video) => {
+        video.addEventListener('play', function () {
+            const overlay = document.querySelector(`[data-video-id="${video.id}"]`);
+            overlay.style.display = 'none';
+        });
+        video.addEventListener('ended', function () {
+            const overlay = document.querySelector(`[data-video-id="${video.id}"]`);
+            overlay.style.display = 'flex';
+        });
+    });
+</script>
+</body>
+
+</html>
