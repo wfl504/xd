@@ -1,4 +1,5 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
@@ -41,88 +42,60 @@
 
 <body>
     <div class="video-container">
-        <video id="video1" controls>
+        <video id="video1" controls playsinline preload="metadata">
             <source src="./video/2.mp4" type="video/mp4">
-            Your browser does not support the video tag.
+            您的浏览器不支持 video 标签。
         </video>
-        <div class="video-overlay" data-video-id="video1">
-            <img src="img/bPq5n9ShMy.png" alt="Play Video">
+        <div class="video-overlay" data-target="video1">
+            <img src="img/bPq5n9ShMy.png" alt="播放视频">
         </div>
     </div>
     <div class="video-container">
-        <video id="video2" controls>
+        <video id="video2" controls playsinline preload="metadata">
             <source src="./video/12.mp4" type="video/mp4">
-            Your browser does not support the video tag.
+            您的浏览器不支持 video 标签。
         </video>
-        <div class="video-overlay" data-video-id="video2">
-            <img src="img/bPq5n9ShMy.png" alt="Play Video">
+        <div class="video-overlay" data-target="video2">
+            <img src="img/bPq5n9ShMy.png" alt="播放视频">
         </div>
     </div>
-    <!-- 更多视频和图片可以继续添加 -->
-    <!-- <script>
-        // JavaScript部分
-        const overlays = document.querySelectorAll('.video-overlay');
-        const videos = document.querySelectorAll('video');
-        overlays.forEach((overlay, index) => {
-            overlay.addEventListener('click', function () {
-                const videoId = overlay.getAttribute('data-video-id');
-                const video = document.getElementById(videoId);
-                if (video.paused) {
-                    video.play();
-                } else {
-                    video.pause();
-                }
-            });
-        });
-        videos.forEach((video) => {
-            video.addEventListener('play', function () {
-                const overlay = document.querySelector(`[data-video-id="${video.id}"]`);
-                overlay.style.display = 'none';
-            });
-            video.addEventListener('ended', function () {
-                const overlay = document.querySelector(`[data-video-id="${video.id}"]`);
-                overlay.style.display = 'flex';
-            });
-        });
-    </script> -->
+    <!-- 更多视频可以继续按相同结构添加 -->
     <script>
-    // JavaScript部分
-    const overlays = document.querySelectorAll('.video-overlay');
-    const videos = document.querySelectorAll('video');
-    let currentPlayingVideo = null; // 用于跟踪当前播放的视频
-    
-    overlays.forEach((overlay, index) => {
-        overlay.addEventListener('click', function () {
-            const videoId = overlay.getAttribute('data-video-id');
-            const video = document.getElementById(videoId);
-            // 如果当前有视频正在播放，则先停止播放，并显示其覆盖层图片
-            if (currentPlayingVideo && currentPlayingVideo !== video) {
-                currentPlayingVideo.pause();
-                const currentOverlay = document.querySelector(`[data-video-id="${currentPlayingVideo.id}"]`);
-                currentOverlay.style.display = 'flex';
-            }
-            // 播放或暂停当前视频
-            if (video.paused) {
-                video.play();
-            } else {
-                video.pause();
-            }
-            // 更新当前播放的视频引用
-            currentPlayingVideo = video;
-        });
-    });
+        (function () {
+            var currentPlaying = null; // 跟踪当前正在播放的视频
 
-    videos.forEach((video) => {
-        video.addEventListener('play', function () {
-            const overlay = document.querySelector(`[data-video-id="${video.id}"]`);
-            overlay.style.display = 'none';
-        });
-        video.addEventListener('ended', function () {
-            const overlay = document.querySelector(`[data-video-id="${video.id}"]`);
-            overlay.style.display = 'flex';
-        });
-    });
-</script>
+            document.querySelectorAll('.video-container').forEach(function (container) {
+                var video = container.querySelector('video');
+                var overlay = container.querySelector('.video-overlay');
+
+                // 点击覆盖层：暂停其他视频，再切换当前视频的播放状态
+                overlay.addEventListener('click', function () {
+                    if (currentPlaying && currentPlaying !== video) {
+                        currentPlaying.pause();
+                    }
+                    if (video.paused) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                });
+
+                video.addEventListener('play', function () {
+                    currentPlaying = video;
+                    overlay.style.display = 'none';
+                });
+
+                // 暂停或播放结束后恢复覆盖层（原版缺少 pause 处理，手动暂停后覆盖层不会回来）
+                video.addEventListener('pause', function () {
+                    overlay.style.display = 'flex';
+                });
+
+                video.addEventListener('ended', function () {
+                    overlay.style.display = 'flex';
+                });
+            });
+        })();
+    </script>
 </body>
 
 </html>
